@@ -1,65 +1,141 @@
 package mx.edu.utch.proyectofinal;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import mx.edu.utch.proyectofinal.db.DataBase;
+import mx.edu.utch.proyectofinal.model.Movimiento;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class DashboardController {
 
-    @FXML
-    private ResourceBundle resources;
+    @FXML private Label balanceLabel;
+    @FXML private TextField descripcionField;
+    @FXML private TextField montoField;
+    @FXML private DatePicker fechaPicker;
+    @FXML private Button btnRegistrarIngreso;
+    @FXML private Button btnRegistrarGasto;
+    @FXML private Button btnBorrar;
+
+    @FXML private TableView<Movimiento> movimientosTable;
+    @FXML private TableColumn<Movimiento, String> fechaTable;
+    @FXML private TableColumn<Movimiento, String> tipoTable;
+    @FXML private TableColumn<Movimiento, Double> montoTable;
+    @FXML private TableColumn<Movimiento, String> descripcionTable;
+
+    private final ObservableList<Movimiento> datos = FXCollections.observableArrayList();
+    private double balance = 0.0;
+
+    private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @FXML
-    private URL location;
+    private void initialize() {
+        // Inicializa DB (crea tabla si no existe) y carga datos
+        DataBase.init();
 
-    @FXML
-    private Label balanceLabel;
+        // Configurar columnas con getters del POJO
+        fechaTable.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        tipoTable.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        montoTable.setCellValueFactory(new PropertyValueFactory<>("monto"));
+        descripcionTable.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
 
-    @FXML
-    private Button btnRegistrarGasto;
+        // Fuente de datos para la tabla
+        movimientosTable.setItems(datos);
 
-    @FXML
-    private Button btnRegistrarIngreso;
+        // Fecha por defecto y deshabilitar edición por teclado
+        fechaPicker.setValue(LocalDate.now());
+        fechaPicker.setEditable(false);
 
-    @FXML
-    private TextField descripcionField;
+        // Acciones
+        btnRegistrarIngreso.setOnAction(e -> registrar("Ingreso"));
+        btnRegistrarGasto.setOnAction(e -> registrar("Gasto"));
+        btnBorrar.setOnAction(e -> borrarSeleccionado());
 
-    @FXML
-    private TableColumn<?, ?> descripcionTable;
-
-    @FXML
-    private DatePicker fechaPicker;
-
-    @FXML
-    private TableColumn<?, ?> fechaTable;
-
-    @FXML
-    private TextField montoField;
-
-    @FXML
-    private TableColumn<?, ?> montoTable;
-
-    @FXML
-    private TableColumn<?, ?> tipoTable;
-
-    @FXML
-    void initialize() {
-        assert balanceLabel != null : "fx:id=\"balanceLabel\" was not injected: check your FXML file 'Dashboard-view.fxml'.";
-        assert btnRegistrarGasto != null : "fx:id=\"btnRegistrarGasto\" was not injected: check your FXML file 'Dashboard-view.fxml'.";
-        assert btnRegistrarIngreso != null : "fx:id=\"btnRegistrarIngreso\" was not injected: check your FXML file 'Dashboard-view.fxml'.";
-        assert descripcionField != null : "fx:id=\"descripcionField\" was not injected: check your FXML file 'Dashboard-view.fxml'.";
-        assert descripcionTable != null : "fx:id=\"descripcionTable\" was not injected: check your FXML file 'Dashboard-view.fxml'.";
-        assert fechaPicker != null : "fx:id=\"fechaPicker\" was not injected: check your FXML file 'Dashboard-view.fxml'.";
-        assert fechaTable != null : "fx:id=\"fechaTable\" was not injected: check your FXML file 'Dashboard-view.fxml'.";
-        assert montoField != null : "fx:id=\"montoField\" was not injected: check your FXML file 'Dashboard-view.fxml'.";
-        assert montoTable != null : "fx:id=\"montoTable\" was not injected: check your FXML file 'Dashboard-view.fxml'.";
-        assert tipoTable != null : "fx:id=\"tipoTable\" was not injected: check your FXML file 'Dashboard-view.fxml'.";
-
+        // Cargar datos iniciales y balance desde la DB
+        recargarTablaYBalance();
     }
 
+    private void registrar(String tipo) {
+        String desc = safe(descripcionField.getText());
+        String montoTxt = safe(montoField.getText());
+        LocalDate fecha = fechaPicker.getValue();
+
+        if (desc.isEmpty() || montoTxt.isEmpty() || fecha == null) {
+            info("Completa descripción, monto y fecha.");
+            return;
+        }
+
+        double monto;
+        try {
+            monto = Double.parseDouble(montoTxt);
+        } catch (NumberFormatException ex) {
+            info("Monto inválido (ej. 150.50).");
+            return;
+        }
+        if (monto <= 0) {
+            info("El monto debe ser mayor que cero.");
+            return;
+        }
+
+        // Guardar en DB
+        Movimiento m = new Movimiento(DF.format(fecha), tipo, monto, desc);
+        try {
+            DataBase.insertar(m);
+        } catch (RuntimeException ex) {
+            info("No se pudo guardar el movimiento: " + ex.getMessage());
+            return;
+        }
+
+        // Recargar datos desde DB y limpiar formulario
+        recargarTablaYBalance();
+        limpiar();
+        info("Movimiento registrado correctamente.");
+    }
+
+    private void recargarTablaYBalance() {
+        try {
+            List<Movimiento> lista = DataBase.listar();
+            datos.setAll(lista);
+            balance = DataBase.balance();
+            actualizarBalance();
+        } catch (RuntimeException ex) {
+            info("Error al cargar datos: " + ex.getMessage());
+        }
+    }
+
+    private void actualizarBalance() {
+        balanceLabel.setText(String.format("$%.2f", balance));
+    }
+
+    private void limpiar() {
+        descripcionField.clear();
+        montoField.clear();
+        fechaPicker.setValue(LocalDate.now());
+    }
+
+    private void info(String m) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION, m, ButtonType.OK);
+        a.setHeaderText(null);
+        a.show();
+    }
+
+    private String safe(String s) {
+        return s == null ? "" : s.trim();
+    }
+
+    private void borrarSeleccionado() {
+        Movimiento seleccionado = movimientosTable.getSelectionModel().getSelectedItem();
+        if (seleccionado == null) {
+            info("Selecciona un movimiento para borrar.");
+            return;
+        }
+        DataBase.borrar(seleccionado.getId());
+        recargarTablaYBalance();
+        info("Movimiento borrado correctamente.");
+    }
 }

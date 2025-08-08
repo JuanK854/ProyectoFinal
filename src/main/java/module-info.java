@@ -11,8 +11,14 @@ module mx.edu.utch.proyectofinal {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
+
+    requires java.sql;
+
     requires org.xerial.sqlitejdbc;
 
     opens mx.edu.utch.proyectofinal to javafx.fxml;
     exports mx.edu.utch.proyectofinal;
+    exports mx.edu.utch.proyectofinal.model;
+    opens mx.edu.utch.proyectofinal.model to javafx.fxml;
+
 }
