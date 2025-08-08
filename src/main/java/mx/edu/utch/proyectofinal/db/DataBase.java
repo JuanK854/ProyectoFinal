@@ -44,13 +44,14 @@ public class DataBase {
     }
 
     public static List<Movimiento> listar() {
-        String sql = "SELECT fecha, tipo, monto, descripcion FROM movimientos ORDER BY id DESC";
+        String sql = "SELECT id, fecha, tipo, monto, descripcion FROM movimientos ORDER BY id DESC";
         List<Movimiento> out = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(URL);
              Statement st = con.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 out.add(new Movimiento(
+                        rs.getInt("id"),
                         rs.getString("fecha"),
                         rs.getString("tipo"),
                         rs.getDouble("monto"),
@@ -79,4 +80,16 @@ public class DataBase {
             throw new RuntimeException("Error calculando balance", e);
         }
     }
+
+    public static void borrar(int id) {
+        String sql = "DELETE FROM movimientos WHERE id = ?";
+        try (Connection con = DriverManager.getConnection(URL);
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error borrando movimiento", e);
+        }
+    }
+
 }

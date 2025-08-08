@@ -20,6 +20,7 @@ public class DashboardController {
     @FXML private DatePicker fechaPicker;
     @FXML private Button btnRegistrarIngreso;
     @FXML private Button btnRegistrarGasto;
+    @FXML private Button btnBorrar;
 
     @FXML private TableView<Movimiento> movimientosTable;
     @FXML private TableColumn<Movimiento, String> fechaTable;
@@ -53,6 +54,7 @@ public class DashboardController {
         // Acciones
         btnRegistrarIngreso.setOnAction(e -> registrar("Ingreso"));
         btnRegistrarGasto.setOnAction(e -> registrar("Gasto"));
+        btnBorrar.setOnAction(e -> borrarSeleccionado());
 
         // Cargar datos iniciales y balance desde la DB
         recargarTablaYBalance();
@@ -124,5 +126,16 @@ public class DashboardController {
 
     private String safe(String s) {
         return s == null ? "" : s.trim();
+    }
+
+    private void borrarSeleccionado() {
+        Movimiento seleccionado = movimientosTable.getSelectionModel().getSelectedItem();
+        if (seleccionado == null) {
+            info("Selecciona un movimiento para borrar.");
+            return;
+        }
+        DataBase.borrar(seleccionado.getId());
+        recargarTablaYBalance();
+        info("Movimiento borrado correctamente.");
     }
 }
