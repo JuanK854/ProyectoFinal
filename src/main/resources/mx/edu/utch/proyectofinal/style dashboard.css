@@ -43,7 +43,7 @@
 .button {
     -fx-background-radius: 10;
     -fx-font-weight: bold;
-    -fx-text-fill: white;
+    -fx-text-fill: Black;
     -fx-padding: 8 14;
     -fx-cursor: hand;
 }

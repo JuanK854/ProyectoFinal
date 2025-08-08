@@ -9,19 +9,18 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utch.proyectofinal.DashboardController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utch.proyectofinal.DashboardController">
     <children>
         <Label layoutX="203.0" layoutY="76.0" stylesheets="@style%20dashboard.css" text="GESTOR DE FINANZAS PERSONALES" />
-        <Label layoutX="107.0" layoutY="141.0" text="Balance actual" />
-        <Label fx:id="balanceLabel" layoutX="341.0" layoutY="141.0" text="Label" />
-        <Label layoutX="114.0" layoutY="183.0" text="Descripcion" />
+        <Label layoutX="107.0" layoutY="141.0" stylesheets="@style%20dashboard.css" text="Balance actual" />
+        <Label fx:id="balanceLabel" layoutX="341.0" layoutY="141.0" stylesheets="@style%20dashboard.css" text="Label" />
+        <Label layoutX="114.0" layoutY="183.0" stylesheets="@style%20dashboard.css" text="Descripcion" />
         <TextField fx:id="descripcionField" layoutX="281.0" layoutY="179.0" />
-        <Label layoutX="127.0" layoutY="226.0" text="Monto" />
+        <Label layoutX="127.0" layoutY="226.0" stylesheets="@style%20dashboard.css" text="Monto" />
         <TextField fx:id="montoField" layoutX="281.0" layoutY="222.0" />
-        <Label layoutX="129.0" layoutY="266.0" text="Fecha" />
-        <DatePicker fx:id="fechaPicker" layoutX="268.0" layoutY="271.0" />
-        <Button fx:id="btnRegistrarIngreso" layoutX="107.0" layoutY="363.0" mnemonicParsing="false" text="Registrar ingreso" />
-        <Button fx:id="btnRegistrarGasto" layoutX="268.0" layoutY="363.0" mnemonicParsing="false" text="Registrar gasto" />
+        <Label layoutX="129.0" layoutY="266.0" stylesheets="@style%20dashboard.css" text="Fecha" />
+        <DatePicker fx:id="fechaPicker" layoutX="269.0" layoutY="269.0" />
+        <Button fx:id="btnRegistrarIngreso" layoutX="82.0" layoutY="363.0" mnemonicParsing="false" stylesheets="@style%20dashboard.css" text="Registrar ingreso" />
         <Label layoutX="234.0" layoutY="434.0" text="Movimientos registrados" />
         <TableView fx:id="movimientosTable" layoutX="2.0" layoutY="463.0" prefHeight="250.0" prefWidth="600.0">
             <columns>
@@ -35,10 +34,7 @@
             <URL value="@style%20dashboard.css" />
          </stylesheets>
         </TableView>
-      <Button fx:id="btnBorrar" layoutX="430.0" layoutY="363.0" mnemonicParsing="false" stylesheets="@borrar.css" text="Borrar registro" />
+      <Button fx:id="btnBorrar" layoutX="408.0" layoutY="363.0" mnemonicParsing="false" stylesheets="@borrar.css" text="Borrar registro" />
+        <Button fx:id="btnRegistrarGasto" layoutX="248.0" layoutY="363.0" mnemonicParsing="false" stylesheets="@style%20dashboard.css" text="Registrar gasto" textFill="#6b1919" />
     </children>
-   <stylesheets>
-      <URL value="@style%20dashboard.css" />
-      <URL value="@style.css" />
-   </stylesheets>
 </Pane>

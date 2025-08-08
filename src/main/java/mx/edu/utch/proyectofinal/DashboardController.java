@@ -33,49 +33,51 @@ public class DashboardController {
     private double balance = 0.0;
 
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final String TIPO_GASTO = "Gasto";
 
     @FXML
     private void initialize() {
-        // Inicializa DB (crea tabla si no existe) y carga datos
         DataBase.init();
 
-        // Configurar columnas con getters del POJO
+        btnRegistrarIngreso.setDisable(true);
+        btnRegistrarGasto.setDisable(true);
+        descripcionField.textProperty().addListener((obs, o, n) -> validarCampos());
+        montoField.textProperty().addListener((obs, o, n) -> validarCampos());
+        fechaPicker.valueProperty().addListener((obs, o, n) -> validarCampos());
+
+        // Columnas y  getters del POJO
         fechaTable.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         tipoTable.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         montoTable.setCellValueFactory(new PropertyValueFactory<>("monto"));
         descripcionTable.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
 
-        // Fuente de datos para la tabla
         movimientosTable.setItems(datos);
 
-        // Fecha por defecto y deshabilitar edición por teclado
         fechaPicker.setValue(LocalDate.now());
         fechaPicker.setEditable(false);
 
-        // Acciones
         btnRegistrarIngreso.setOnAction(e -> registrar("Ingreso"));
         btnRegistrarGasto.setOnAction(e -> registrar("Gasto"));
         btnBorrar.setOnAction(e -> borrarSeleccionado());
 
-        // Cargar datos iniciales y balance desde la DB
         recargarTablaBalance();
     }
 
     private void registrar(String tipo) {
-        String desc = safe(descripcionField.getText());
-        String montoTxt = safe(montoField.getText());
-        LocalDate fecha = fechaPicker.getValue();
+        final String descripcion = safe(descripcionField.getText());
+        final String montoTxt    = safe(montoField.getText());
+        final LocalDate fecha    = fechaPicker.getValue();
 
-        if (desc.isEmpty() || montoTxt.isEmpty() || fecha == null) {
-            info("Completa descripción, monto y fecha.");
-            return;
-        }
+//        if (descripcion.isEmpty() || montoTxt.isEmpty() || fecha == null) {
+//            info(MSG_CAMPOS_INCOMPLETOS);
+//            return;
+//        }
 
-        double monto;
+        final double monto;
         try {
             monto = Double.parseDouble(montoTxt);
         } catch (NumberFormatException ex) {
-            info("Monto inválido introduzca solo numeros");
+            info("Monto inválido ingrese solo numeros");
             return;
         }
         if (monto <= 0) {
@@ -83,16 +85,19 @@ public class DashboardController {
             return;
         }
 
-        // Guardar en DB
-        Movimiento m = new Movimiento(DF.format(fecha), tipo, monto, desc);
-        try {
-            DataBase.insertar(m);
-        } catch (RuntimeException ex) {
-            info("No se pudo guardar el movimiento: " + ex.getMessage());
+        if (esGasto(tipo) && excedePresupuesto(monto)) {
+            warn("Este gasto supera el presupuesto");
             return;
         }
 
-        // Recargar datos desde DB y limpiar formulario
+        final Movimiento mov = new Movimiento(DF.format(fecha), tipo, monto, descripcion);
+        try {
+            DataBase.insertar(mov);
+        } catch (RuntimeException ex) {
+            info("No se pudo guardar el movimiento: ");
+            return;
+        }
+
         recargarTablaBalance();
         limpiar();
         info("Movimiento registrado correctamente.");
@@ -105,7 +110,7 @@ public class DashboardController {
             balance = DataBase.balance();
             actualizarBalance();
         } catch (RuntimeException ex) {
-            info("Error al cargar datos: " + ex.getMessage());
+            info("Error al cargar datos: " );
         }
     }
 
@@ -125,8 +130,22 @@ public class DashboardController {
         a.show();
     }
 
+    private void warn(String m) {
+        Alert a = new Alert(Alert.AlertType.WARNING, m, ButtonType.OK);
+        a.setHeaderText(null);
+        a.show();
+    }
+
     private String safe(String s) {
         return s == null ? "" : s.trim();
+    }
+
+    private boolean esGasto(String tipo) {
+        return TIPO_GASTO.equalsIgnoreCase(tipo);
+    }
+
+    private boolean excedePresupuesto(double montoGasto) {
+        return (balance - montoGasto) < 0.0;
     }
 
     private void borrarSeleccionado() {
@@ -138,5 +157,15 @@ public class DashboardController {
         DataBase.borrar(seleccionado.getId());
         recargarTablaBalance();
         info("Movimiento borrado correctamente.");
+    }
+
+    private void validarCampos() {
+        boolean camposLlenos =
+                !descripcionField.getText().trim().isEmpty() &&
+                        !montoField.getText().trim().isEmpty() &&
+                        fechaPicker.getValue() != null;
+
+        btnRegistrarIngreso.setDisable(!camposLlenos);
+        btnRegistrarGasto.setDisable(!camposLlenos);
     }
 }
