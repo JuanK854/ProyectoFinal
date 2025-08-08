@@ -9,7 +9,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utch.proyectofinal.DashboardController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mx.edu.utch.proyectofinal.DashboardController">
     <children>
         <Label layoutX="203.0" layoutY="76.0" stylesheets="@style%20dashboard.css" text="GESTOR DE FINANZAS PERSONALES" />
         <Label layoutX="107.0" layoutY="141.0" text="Balance actual" />
@@ -37,4 +37,8 @@
         </TableView>
       <Button fx:id="btnBorrar" layoutX="430.0" layoutY="363.0" mnemonicParsing="false" stylesheets="@borrar.css" text="Borrar registro" />
     </children>
+   <stylesheets>
+      <URL value="@style%20dashboard.css" />
+      <URL value="@style.css" />
+   </stylesheets>
 </Pane>
