@@ -5,10 +5,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import mx.edu.utch.proyectofinal.db.DataBase;
 import mx.edu.utch.proyectofinal.model.Movimiento;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class DashboardController {
 
@@ -27,23 +29,33 @@ public class DashboardController {
 
     private final ObservableList<Movimiento> datos = FXCollections.observableArrayList();
     private double balance = 0.0;
+
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @FXML
     private void initialize() {
+        // Inicializa DB (crea tabla si no existe) y carga datos
+        DataBase.init();
+
+        // Configurar columnas con getters del POJO
         fechaTable.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         tipoTable.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         montoTable.setCellValueFactory(new PropertyValueFactory<>("monto"));
         descripcionTable.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+
+        // Fuente de datos para la tabla
         movimientosTable.setItems(datos);
 
+        // Fecha por defecto y deshabilitar edición por teclado
         fechaPicker.setValue(LocalDate.now());
         fechaPicker.setEditable(false);
 
+        // Acciones
         btnRegistrarIngreso.setOnAction(e -> registrar("Ingreso"));
         btnRegistrarGasto.setOnAction(e -> registrar("Gasto"));
 
-        actualizarBalance();
+        // Cargar datos iniciales y balance desde la DB
+        recargarTablaYBalance();
     }
 
     private void registrar(String tipo) {
@@ -57,19 +69,60 @@ public class DashboardController {
         }
 
         double monto;
-        try { monto = Double.parseDouble(montoTxt); }
-        catch (NumberFormatException ex) { info("Monto inválido (ej. 150.50)."); return; }
-        if (monto <= 0) { info("El monto debe ser mayor que cero."); return; }
+        try {
+            monto = Double.parseDouble(montoTxt);
+        } catch (NumberFormatException ex) {
+            info("Monto inválido (ej. 150.50).");
+            return;
+        }
+        if (monto <= 0) {
+            info("El monto debe ser mayor que cero.");
+            return;
+        }
 
-        datos.add(new Movimiento(DF.format(fecha), tipo, monto, desc));
-        balance += tipo.equals("Ingreso") ? monto : -monto;
-        actualizarBalance();
+        // Guardar en DB
+        Movimiento m = new Movimiento(DF.format(fecha), tipo, monto, desc);
+        try {
+            DataBase.insertar(m);
+        } catch (RuntimeException ex) {
+            info("No se pudo guardar el movimiento: " + ex.getMessage());
+            return;
+        }
+
+        // Recargar datos desde DB y limpiar formulario
+        recargarTablaYBalance();
         limpiar();
         info("Movimiento registrado correctamente.");
     }
 
-    private void actualizarBalance() { balanceLabel.setText(String.format("$%.2f", balance)); }
-    private void limpiar() { descripcionField.clear(); montoField.clear(); fechaPicker.setValue(LocalDate.now()); }
-    private void info(String m) { new Alert(Alert.AlertType.INFORMATION, m).show(); }
-    private String safe(String s) { return s == null ? "" : s.trim(); }
+    private void recargarTablaYBalance() {
+        try {
+            List<Movimiento> lista = DataBase.listar();
+            datos.setAll(lista);
+            balance = DataBase.balance();
+            actualizarBalance();
+        } catch (RuntimeException ex) {
+            info("Error al cargar datos: " + ex.getMessage());
+        }
+    }
+
+    private void actualizarBalance() {
+        balanceLabel.setText(String.format("$%.2f", balance));
+    }
+
+    private void limpiar() {
+        descripcionField.clear();
+        montoField.clear();
+        fechaPicker.setValue(LocalDate.now());
+    }
+
+    private void info(String m) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION, m, ButtonType.OK);
+        a.setHeaderText(null);
+        a.show();
+    }
+
+    private String safe(String s) {
+        return s == null ? "" : s.trim();
+    }
 }
