@@ -22,7 +22,7 @@
         <Button fx:id="btnRegistrarIngreso" layoutX="157.0" layoutY="350.0" mnemonicParsing="false" text="Registrar ingreso" />
         <Button fx:id="btnRegistrarGasto" layoutX="378.0" layoutY="350.0" mnemonicParsing="false" text="Registrar gasto" />
         <Label layoutX="234.0" layoutY="434.0" text="Movimientos registrados" />
-        <TableView layoutX="2.0" layoutY="463.0" prefHeight="235.0" prefWidth="593.0">
+        <TableView fx:id="movimientosTable" layoutX="2.0" layoutY="463.0" prefHeight="250.0" prefWidth="600.0">
             <columns>
                 <TableColumn fx:id="fechaTable" prefWidth="149.0" text="Fecha" />
                 <TableColumn fx:id="tipoTable" minWidth="5.0" prefWidth="138.0" text="Tipo" />

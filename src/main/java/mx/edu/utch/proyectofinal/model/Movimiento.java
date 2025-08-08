@@ -1,10 +1,10 @@
 package mx.edu.utch.proyectofinal.model;
 
 public class Movimiento {
-    private String fecha;       // ej. "2025-08-08"
-    private String tipo;        // "Ingreso" o "Gasto"
-    private double monto;       // número positivo
-    private String descripcion; // texto corto
+    private String fecha;
+    private String tipo;
+    private double monto;
+    private String descripcion;
 
     public  Movimiento(){
         this(" "," ",0," ");
