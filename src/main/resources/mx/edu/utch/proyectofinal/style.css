@@ -1,0 +1,188 @@
+/* ───────────────────────────────────────────────────────────
+   database-theme.css  |  Versión 1.0  |  JavaFX 21+
+   Paleta base
+     Fondo app        #f4f6f9
+     Fondo controles  #ffffff
+     Borde            #cdd1d9
+     Primario         #0066cc     (selección/énfasis)
+     Primario hover   #005bb5
+     Éxito            #28a745
+     Advertencia      #ffc107
+     Error            #dc3545
+   Tipografía
+     JetBrains Mono → Consolas → Courier New → monospace
+   ─────────────────────────────────────────────────────────── */
+
+/* ───────── Généricas ───────── */
+.root {
+    -fx-base:             #f4f6f9;   /* tono general */
+    -fx-background-color: #f4f6f9;
+    -fx-font-family: "JetBrains Mono", "Consolas", "Courier New", monospace;
+    /* no establecer -fx-font-size para respetar tamaños nativos */
+}
+
+.label,
+.text,
+.hyperlink {
+    -fx-text-fill: #1b1d21;
+}
+
+/* ───────── Botones & Toggles ───────── */
+.button,
+.toggle-button,
+.choice-box,
+.combo-box-base {
+    -fx-background-color: #ffffff, linear-gradient(to bottom, #ffffff, #f0f3f7);
+    -fx-border-color:     #cdd1d9;
+    -fx-border-radius:    4;
+    -fx-background-radius:4;
+}
+.button:hover,
+.toggle-button:hover,
+.choice-box:hover,
+.combo-box-base:hover {
+    -fx-background-color: #eef2f7;
+}
+.button:pressed,
+.toggle-button:pressed {
+    -fx-background-color: #e2e8f1;
+}
+.toggle-button:selected {
+    -fx-background-color: #0066cc;
+    -fx-text-fill: #ffffff;
+}
+
+/* ───────── Campos de texto ───────── */
+.text-field,
+.password-field,
+.text-area,
+.spinner,
+.search-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color:     #cdd1d9;
+    -fx-background-insets: 0;
+}
+.text-field:focused,
+.password-field:focused,
+.text-area:focused,
+.spinner:focused {
+    -fx-border-color: #0066cc;
+}
+
+/* ───────── List & Tree ───────── */
+.list-view,
+.tree-view {
+    -fx-control-inner-background: #ffffff;
+    -fx-background-insets: 0;
+    -fx-border-color: #cdd1d9;
+}
+.list-cell:filled:selected,
+.tree-cell:filled:selected {
+    -fx-background-color: #0066cc;
+    -fx-text-fill: #ffffff;
+}
+.list-cell:filled:selected:hover,
+.tree-cell:filled:selected:hover {
+    -fx-background-color: #005bb5;
+}
+
+/* ───────── Table & TreeTable ───────── */
+.table-view,
+.tree-table-view {
+    -fx-table-cell-border-color: #d7dbe3;
+    -fx-base: #ffffff;
+    -fx-control-inner-background: #ffffff;
+    -fx-border-color: #cdd1d9;
+}
+.column-header,
+.tree-table-view .column-header {
+    -fx-background-color: linear-gradient(to bottom, #dbe6f1 0%, #c9d8ec 100%);
+}
+.table-row-cell:selected,
+.tree-table-row-cell:selected {
+    -fx-background-color: #0066cc;
+    -fx-text-fill: #ffffff;
+}
+.table-row-cell:selected:hover,
+.tree-table-row-cell:selected:hover {
+    -fx-background-color: #005bb5;
+}
+
+/* ───────── Menu & ToolBar ───────── */
+.menu-bar,
+.context-menu,
+.tool-bar {
+    -fx-background-color: #dbe6f1;
+    -fx-border-color: #c0c8d4;
+}
+.menu-item:focused {
+    -fx-background-color: #0066cc;
+    -fx-text-fill: #ffffff;
+}
+
+/* ───────── Tabs & Accordions ───────── */
+.tab-pane .tab-header-area {
+    -fx-background-color: #dbe6f1;
+}
+.tab:selected {
+    -fx-background-color: #ffffff;
+}
+.accordion > .titled-pane > .title {
+    -fx-background-color: #dbe6f1;
+}
+.accordion > .titled-pane:expanded > .title {
+    -fx-background-color: #0066cc;
+    -fx-text-fill: #ffffff;
+}
+
+/* ───────── Form helpers ───────── */
+.progress-bar,
+.progress-indicator {
+    -fx-accent: #28a745;
+}
+.slider .track {
+    -fx-background-color: #cdd1d9;
+}
+.slider .thumb {
+    -fx-background-color: #0066cc;
+}
+.choice-box > .label,
+.combo-box-base > .label {
+    -fx-text-fill: #1b1d21;
+}
+
+/* ───────── Date & Color Picker ───────── */
+.date-picker,
+.color-picker {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cdd1d9;
+}
+
+/* ───────── Dialogs & Tooltips ───────── */
+.dialog-pane,
+.alert {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cdd1d9;
+}
+.tooltip {
+    -fx-background-color: #1b1d21;
+    -fx-text-fill: #ffffff;
+}
+
+/* ───────── Scroll & Split ───────── */
+.scroll-bar,
+.split-pane {
+    -fx-background-color: #f4f6f9;
+}
+.scroll-bar .thumb {
+    -fx-background-color: #cdd1d9;
+}
+.scroll-bar .thumb:hover {
+    -fx-background-color: #b4bcc9;
+}
+
+/* ───────── Indicadores de estado ───────── */
+.success   { -fx-background-color: #28a745; }
+.warning   { -fx-background-color: #ffc107; }
+.danger    { -fx-background-color: #dc3545; }
+.info      { -fx-background-color: #0066cc; }

@@ -19,8 +19,8 @@
         <TextField fx:id="montoField" layoutX="281.0" layoutY="222.0" />
         <Label layoutX="129.0" layoutY="266.0" text="Fecha" />
         <DatePicker fx:id="fechaPicker" layoutX="268.0" layoutY="271.0" />
-        <Button fx:id="btnRegistrarIngreso" layoutX="157.0" layoutY="350.0" mnemonicParsing="false" text="Registrar ingreso" />
-        <Button fx:id="btnRegistrarGasto" layoutX="378.0" layoutY="350.0" mnemonicParsing="false" text="Registrar gasto" />
+        <Button fx:id="btnRegistrarIngreso" layoutX="107.0" layoutY="363.0" mnemonicParsing="false" text="Registrar ingreso" />
+        <Button fx:id="btnRegistrarGasto" layoutX="268.0" layoutY="363.0" mnemonicParsing="false" text="Registrar gasto" />
         <Label layoutX="234.0" layoutY="434.0" text="Movimientos registrados" />
         <TableView fx:id="movimientosTable" layoutX="2.0" layoutY="463.0" prefHeight="250.0" prefWidth="600.0">
             <columns>
@@ -30,5 +30,6 @@
                 <TableColumn fx:id="descripcionTable" prefWidth="148.0" text="Descripcion" />
             </columns>
         </TableView>
+      <Button fx:id="btnBorrar" layoutX="430.0" layoutY="363.0" mnemonicParsing="false" text="Borrar registro" />
     </children>
 </Pane>
