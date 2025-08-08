@@ -58,7 +58,7 @@ public class DashboardController {
         btnBorrar.setOnAction(e -> borrarSeleccionado());
 
         // Cargar datos iniciales y balance desde la DB
-        recargarTablaYBalance();
+        recargarTablaBalance();
     }
 
     private void registrar(String tipo) {
@@ -75,7 +75,7 @@ public class DashboardController {
         try {
             monto = Double.parseDouble(montoTxt);
         } catch (NumberFormatException ex) {
-            info("Monto inválido (ej. 150.50).");
+            info("Monto inválido introduzca solo numeros");
             return;
         }
         if (monto <= 0) {
@@ -93,12 +93,12 @@ public class DashboardController {
         }
 
         // Recargar datos desde DB y limpiar formulario
-        recargarTablaYBalance();
+        recargarTablaBalance();
         limpiar();
         info("Movimiento registrado correctamente.");
     }
 
-    private void recargarTablaYBalance() {
+    private void recargarTablaBalance() {
         try {
             List<Movimiento> lista = DataBase.listar();
             datos.setAll(lista);
@@ -136,7 +136,7 @@ public class DashboardController {
             return;
         }
         DataBase.borrar(seleccionado.getId());
-        recargarTablaYBalance();
+        recargarTablaBalance();
         info("Movimiento borrado correctamente.");
     }
 }
