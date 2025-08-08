@@ -1,0 +1,12 @@
+/* Estilo específico al botón por su fx:id */
+#btnBorrar {
+    -fx-background-color: #dc2626;   /* rojo borrar */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 8 14;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+#btnBorrar:hover   { -fx-background-color: #b91c1c; }
+#btnBorrar:pressed { -fx-background-color: #991b1b; }

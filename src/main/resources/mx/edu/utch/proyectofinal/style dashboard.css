@@ -1,0 +1,94 @@
+/* Fondo general del panel */
+.pane {
+    -fx-background-color: linear-gradient(to bottom right, #d1fae5, #bfdbfe); /* Verde claro a azul claro */
+    -fx-padding: 16;
+    -fx-font-family: "Segoe UI", "Arial";
+    -fx-font-size: 14px;
+}
+
+/* Título principal */
+.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a8a; /* Azul fuerte */
+}
+
+/* Etiquetas */
+.label { 
+    -fx-text-fill: #1f2937; 
+    -fx-font-weight: bold;
+}
+
+/* Balance en verde vivo */
+.balance-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #059669; /* Verde brillante */
+}
+
+/* Campos de texto y fecha */
+.text-field, .date-picker {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #2563eb;
+    -fx-border-radius: 8;
+    -fx-padding: 8 10;
+}
+.text-field:focused, .date-picker:focused {
+    -fx-border-color: #1d4ed8;
+    -fx-effect: dropshadow(gaussian, rgba(29,78,216,0.3), 8, 0.2, 0, 0);
+}
+
+/* Botones base */
+.button {
+    -fx-background-radius: 10;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 8 14;
+    -fx-cursor: hand;
+}
+
+/* Botón ingresos (verde) */
+.btn-primary {
+    -fx-background-color: #22c55e;
+}
+.btn-primary:hover   { -fx-background-color: #16a34a; }
+.btn-primary:pressed { -fx-background-color: #15803d; }
+
+/* Botón gastos (naranja) */
+.btn-secondary {
+    -fx-background-color: #f97316;
+}
+.btn-secondary:hover   { -fx-background-color: #ea580c; }
+.btn-secondary:pressed { -fx-background-color: #c2410c; }
+
+/* Tabla vistosa */
+.table-finance.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #1e3a8a;
+    -fx-border-radius: 10;
+}
+.table-finance .column-header-background {
+    -fx-background-color: linear-gradient(#3b82f6, #1e40af); /* Azul degradado */
+    -fx-background-radius: 10 10 0 0;
+}
+.table-finance .column-header, .table-finance .filler {
+    -fx-size: 36px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.table-finance .table-row-cell:odd   { -fx-background-color: #e0f2fe; }
+.table-finance .table-row-cell:even  { -fx-background-color: #f0fdf4; }
+.table-finance .table-row-cell:hover { -fx-background-color: #fde68a; }
+.table-finance .table-row-cell:selected {
+    -fx-background-color: #fbbf24; /* Amarillo selección */
+    -fx-text-fill: black;
+}
+
+/* Scrollbar */
+.table-finance .scroll-bar:vertical .thumb,
+.table-finance .scroll-bar:horizontal .thumb {
+    -fx-background-color: #93c5fd;
+    -fx-background-radius: 8;
+}

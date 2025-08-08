@@ -18,6 +18,7 @@ public class DashboardController {
     @FXML private TextField descripcionField;
     @FXML private TextField montoField;
     @FXML private DatePicker fechaPicker;
+
     @FXML private Button btnRegistrarIngreso;
     @FXML private Button btnRegistrarGasto;
     @FXML private Button btnBorrar;
