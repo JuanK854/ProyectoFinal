@@ -15,4 +15,6 @@ module mx.edu.utch.proyectofinal {
 
     opens mx.edu.utch.proyectofinal to javafx.fxml;
     exports mx.edu.utch.proyectofinal;
+    exports mx.edu.utch.proyectofinal.model;
+    opens mx.edu.utch.proyectofinal.model to javafx.fxml;
 }
